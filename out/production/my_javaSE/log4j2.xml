@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 文件放在class path目录下会被默认读取-->
+<!-- 优先级 OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL  -->
+<!-- status 默认等级 WARN，是log4j自身内部的信息最低等级,设置为 ERROR 少很多无用信息 -->
+<!-- monitorInterval 间隔多少秒刷新配置 -->
+<configuration status="ERROR" monitorInterval="30">
+    <!-- appender are responsible for delivering LogEvents to their destination. 官方提供多达13种 -->
+    <appenders>
+        <!-- 这个是控制台 -->
+        <console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!-- 输出格式 -->
+            <PatternLayout pattern="[%d{MM-dd HH:mm:ss:SSS}] [%p] - %l -%m%n"/>
+
+        </console>
+        <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用 -->
+        <File name="test" fileName="test.log" append="false">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </File>
+
+        <!-- 日志文件，滚动更新 -->
+        <!-- 配置详情 https://www.cnblogs.com/yeyang/p/7944899.html -->
+        <RollingFile name="logfile" fileName="./logs/system.log"
+                     filePattern="../logs/$${date:yyyy-MM}/system-%d{yyyy-MM-dd}-%i.log.gz">
+            <!-- 只接受 INFO 以上等级信息 -->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{MM-dd HH:mm:ss:SSS}] [%p] - %l -%m%n"/>
+            <policies>
+                <!-- 时间触发，配合filePattern %d的最小时间精度 dd 的 1 倍，即一天 -->
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!-- 文件大小触发，配合filePattern %i 超过"50MB"触发加1 -->
+                <SizeBasedTriggeringPolicy size="50MB"/>
+                <!-- 有整数计数器 %i 时才有效,%i 不会超过10-->
+                <DefaultRolloverStrategy max="10"/>
+            </policies>
+        </RollingFile>
+    </appenders>
+
+
+    <loggers>
+
+        <!--
+        对包 com.test 单独指定Logger
+        level="ERROR" ERROR及以上级别
+        additivity表示是否向上传递打印日志信息（若为true则向上传递，那么root根对象也会进行日志打印）
+        此处只打印 ERROR 到 test 文件
+        -->
+        <Logger name="com.test" level="ERROR" additivity="false">
+            <appender-ref ref="test"/>
+        </Logger>
+
+        <!--
+         additivity 默认为true ,继承 root ,并重写 level,等价于:
+         <Logger name="com.grf.utils" level="ERROR" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="logfile"/>
+        </Logger>
+        -->
+        <Logger name="com.grf.utils" level="ERROR"/>
+
+        <!-- 根对象会被继承 -->
+        <root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="logfile"/>
+        </root>
+    </loggers>
+
+</configuration>

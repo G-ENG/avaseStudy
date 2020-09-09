@@ -1,0 +1,9 @@
+[01-14 17:26:22:033] [INFO] - com.grf.array.test.main(test.java:10) -hello,info
+[01-14 17:26:22:037] [ERROR] - com.grf.array.test.main(test.java:11) -hello,error
+[01-14 17:27:18:693] [INFO] - com.grf.array.test.main(test.java:10) -hello,info
+[01-14 17:27:18:696] [ERROR] - com.grf.array.test.main(test.java:11) -hello,error
+[01-14 17:27:41:626] [INFO] - com.grf.array.test.main(test.java:10) -hello,info
+[01-14 17:27:41:631] [ERROR] - com.grf.array.test.main(test.java:11) -hello,error
+[01-14 17:29:32:630] [INFO] - com.grf.array.test.test(test.java:12) -hello,info
+[01-14 17:29:32:635] [WARN] - com.grf.array.test.test(test.java:13) -hello,warn
+[01-14 17:53:10:112] [ERROR] - com.grf.utils.arrays_collections.ArraysDemo.test(ArraysDemo.java:59) -hello error
