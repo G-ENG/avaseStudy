@@ -17,7 +17,8 @@ import java.lang.reflect.Modifier;
  * @Date 2020/9/9
  **/
 public class BeanCopyUtil {
-    public static void copyBean(Object sourceBean, Object targetBean) {
+
+    public static void copyBean(Object sourceBean, Object targetBean){
         Assert.notNull(sourceBean, "Source must not be null");
         Assert.notNull(targetBean, "Target must not be null");
         Class<?> targetBeanClass = targetBean.getClass();
@@ -41,7 +42,7 @@ public class BeanCopyUtil {
                     writeMethod.invoke(targetBean, value);
                 }
             } catch (IntrospectionException |IllegalAccessException | InvocationTargetException exception ) {
-                exception.printStackTrace();
+                throw new IllegalArgumentException("bean复制异常"+exception.getMessage(),exception);
             }
         }
     }
